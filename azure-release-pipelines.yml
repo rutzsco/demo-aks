@@ -13,9 +13,9 @@ stages:
   parameters:
     stageName: 'CI'
     environment: 'CI-AKS'
-    azureSubscription: $(azureSubscription)
+    azureSubscription: ${{ variables.azureSubscription }}
     resourceGroupName: 'rutzsco-aks'
-    region: 'eastus'
+    region: 'East US'
     clusterName: 'rutzsco-aks1'
     dnsPrefix: 'rutzsco-aks1'
-    sshRSAPublicKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDPQ09GU8I1MDbW1VYc//mY1+k9HnMcQgwcPMnB9SkRx+XTB00ini4oSoVuRezoNTEZvm4NIfeu+aJrUM/xMOKr20CbYBorLV90xZDJ4jVgIKIkQwpwQg7ZToKxWDLfWUKHbiBsKGY2L+PNCisr4ZKUebrqen4JdxLNpe2C/urwg2X9ZHewpFZz+mJOsIXIn6zBhb/pwPWfr/bkRv5dWIOJyav7PGDUhzhn6MCz9tq01Y95B7TQuxu1kyZRcKWq3IAVlTCfSrzwMgHevUK4r6V8Nn7GVSyA6GwM35jnsAsGQIXgNj7K2+ooxzRMwYtrdjaSF5qvFxyB9oUM2H696mnQ9vRhYFAlQu5FOHPp+Q3Tafr4Tq8ecGbUWY2fq1DofXOoxro6XHfJXpPqpDF/L4x014hMkXciiIRblnJob8EMuY68+rFXSoj56yq8xcVPcSHUTQnOBTPkOSw46OJFzIFn25JxUQnvoSW7dUGvFnlQ6CMurZCj6zViVdK065D92RE= developer@DEV-WIN10-CENTU'
+    sshRSAPublicKey: $(sshRSAPublicKey)
