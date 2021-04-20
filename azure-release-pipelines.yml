@@ -1,0 +1,20 @@
+trigger: none
+
+resources:
+  pipelines:
+  - pipeline: build
+    source: 'demo-aks-core - BUILD'
+  
+variables:
+  azureSubscription: 'ADO_RUTZSCO_AIRS_DEPLOY'
+
+stages:
+- template: azure-release-pipelines-stage-template.yml
+  parameters:
+    stageName: 'CI'
+    environment: 'CI'
+    azureSubscription: ${{ variables.azureSubscription }}
+    webAppName: 'rutzsco-demo-az-maps'
+    resourceGroupName: 'rutzsco-demo-az-maps'
+    region: 'East US'
+    packageName: 'Demo.Map.UI.zip'
