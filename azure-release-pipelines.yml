@@ -6,7 +6,7 @@ resources:
     source: 'demo-aks-core - BUILD'
   
 variables:
-  azureSubscription: 'ADO_RUTZSCO_AIRS_DEPLOY'
+  azureSubscription: 'Demo Account'
 
 stages:
 - template: azure-release-pipelines-stage-template.yml
