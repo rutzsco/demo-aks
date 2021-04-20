@@ -15,7 +15,7 @@ stages:
     environment: 'CI-AKS'
     azureSubscription: $(azureSubscription)
     resourceGroupName: 'rutzsco-aks'
-    region: 'eastus'
+    region: 'East US'
     clusterName: 'rutzsco-aks1'
     dnsPrefix: 'rutzsco-aks1'
     sshRSAPublicKey: $(sshRSAPublicKey)
