@@ -5,15 +5,15 @@ parameters:
   default: ''
 - name: azureSubscription
   default: ''
-- name: webAppName
-  default: ''
 - name: resourceGroupName
-  default: ''
-- name: storageAccountName
   default: ''
 - name: region
   default: ''
-- name: packageName
+- name: clusterName
+  default: ''
+- name: dnsPrefix
+  default: ''
+- name: sshRSAPublicKey
   default: ''
 
 stages:
@@ -25,7 +25,7 @@ stages:
       displayName: Deploy
       environment: ${{ parameters.environment }}
       pool:
-        vmImage: 'vs2017-win2016'
+        vmImage: 'ubuntu-latest'
   
       strategy:
         runOnce:
@@ -33,19 +33,11 @@ stages:
   
             steps:
             - task: AzureResourceGroupDeployment@2
-              displayName: '1. Create Azure App Service Infrastructure'
+              displayName: '1. Create AKS Infrastructure'
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
                 resourceGroupName: ${{ parameters.resourceGroupName }}
                 location: ${{ parameters.region }}
-                csmFile: '$(Pipeline.Workspace)/build/Infrastructure/appservice-web-app.json'
-                overrideParameters: '-appName ${{ parameters.webAppName }}'
+                csmFile: '$(Pipeline.Workspace)/build/Infrastructure/aks-basic.json'
+                overrideParameters: '-clusterName ${{ parameters.clusterName }} -dnsPrefix ${{ parameters.dnsPrefix }} -sshRSAPublicKey ${{ parameters.sshRSAPublicKey }}'
                 deploymentOutputs: ResourceGroupDeploymentOutputs
-
-            - task: AzureRmWebAppDeployment@4
-              displayName: '2. Azure App Service Deploy:'
-              inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                WebAppName: ${{ parameters.webAppName }}
-                package: '$(Pipeline.Workspace)/build/App/${{ parameters.packageName }}'
-                AppSettings: ''
