@@ -48,7 +48,7 @@ stages:
       displayName: 'helm package'
       inputs:
         command: package
-        chartPath: '$(System.DefaultWorkingDirectory)/_BUILD/Helm/api'
+        chartPath: '$(Build.SourcesDirectory)/DemoAPI/Helm/api'
 
     - task: PublishPipelineArtifact@1
       inputs:
