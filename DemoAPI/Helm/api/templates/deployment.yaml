@@ -39,11 +39,11 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /swagger/index.html
+              path: /status
               port: http
           readinessProbe:
             httpGet:
-              path: /swagger/index.html
+              path: /status
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
