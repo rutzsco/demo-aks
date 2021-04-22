@@ -39,6 +39,6 @@ stages:
           $(tag)
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: 'DemoAPI\Helm'
+        targetPath: 'DemoAPI/Helm'
         artifact: 'Helm'
         publishLocation: 'pipeline'
