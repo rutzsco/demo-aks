@@ -37,8 +37,21 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+    
+    - task: HelmInstaller@0
+      displayName: 'Install Helm 3.5.4'
+      inputs:
+        helmVersion: 3.5.4
+        checkLatestHelmVersion: false
+
+    - task: HelmDeploy@0
+      displayName: 'helm package'
+      inputs:
+        command: package
+        chartPath: '$(System.DefaultWorkingDirectory)/_BUILD/Helm/api'
+
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: 'DemoAPI/Helm'
+        targetPath: '$(Build.ArtifactStagingDirectory)'
         artifact: 'Helm'
         publishLocation: 'pipeline'
