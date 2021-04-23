@@ -44,8 +44,9 @@ stages:
     - task: HelmDeploy@0
       displayName: 'helm package'
       inputs:
-        command: package
+        command: 'package'
         chartPath: '$(Build.SourcesDirectory)/DemoAPI/Helm/api'
+        chartVersion: '$(tag)'
 
     - task: PublishPipelineArtifact@1
       inputs:
