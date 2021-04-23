@@ -1,6 +1,11 @@
 name: 1.0.$(Rev:r)
 trigger:
-- main
+  branches:
+    include:
+    - main
+  paths:
+    exclude:
+    - DemoAPI
 
 resources:
 - repo: self
