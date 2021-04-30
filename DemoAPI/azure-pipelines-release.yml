@@ -47,3 +47,5 @@ stages:
                 releaseName: api
                 overrideValues: 'image.tag=$(resources.pipeline.build.runName)'
                 resetValues: true
+              env:
+                AppVersion: $(resources.pipeline.build.runName)
