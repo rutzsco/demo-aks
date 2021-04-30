@@ -42,8 +42,8 @@ stages:
                 kubernetesCluster: $(kubernetesCluster)
                 command: upgrade
                 chartType: FilePath
-                chartPath: '$(Pipeline.Workspace)/build/Helm/api-$(Build.TriggeredBy.BuildNumber).tgz'
-                chartVersion: '$(Build.BuildNumber)'
+                chartPath: '$(Pipeline.Workspace)/Helm/api-$(Build.TriggeredBy.BuildNumber).tgz'
+                chartVersion: '$(Build.TriggeredBy.BuildNumber)'
                 releaseName: api
-                overrideValues: 'image.tag=$(Build.BuildNumber)'
+                overrideValues: 'image.tag=$(Build.TriggeredBy.BuildNumber)'
                 resetValues: true
