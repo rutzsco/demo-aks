@@ -3,11 +3,11 @@ trigger: none
 resources:
   pipelines:
   - pipeline: build
-    source: 'Stampede - UI - BUILD'
+    source: 'demo-aks-app - BUILD'
   
 variables:
   vmImageName: 'vs2017-win2016'
-  azureSubscription: 'AZ_ADO_DEPLOYMENT'
+  azureSubscription: 'Demo Account'
   region: 'Central US'
   resourceGroupName: 'stampede-ci'
 stages:
@@ -15,10 +15,8 @@ stages:
  - stage: CI
    displayName: CI Stage 
    variables:
-     appName: 'stampede-ui-ci'
-     storageAccountName: 'azfstuici'
-     resourceGroupName: 'stampede-ci'  
-     linuxFxVersion: 'DOCKER|rutzscocr.azurecr.io/stampedeui'  
+     kubernetesCluster: 'rutzsco-aks1'
+     resourceGroupName: 'rutzsco-aks'  
    jobs:
    - deployment: Deploy
      displayName: Deploy
@@ -39,12 +37,12 @@ stages:
             - task: HelmDeploy@0
               displayName: 'helm upgrade'
               inputs:
-                azureSubscription: 'Demo Account'
-                azureResourceGroup: 'rutzsco-aks'
-                kubernetesCluster: 'rutzsco-aks1'
+                azureSubscription: $(azureSubscription)
+                azureResourceGroup: $(resourceGroupName)
+                kubernetesCluster: $(kubernetesCluster)
                 command: upgrade
                 chartType: FilePath
-                chartPath: '$(System.DefaultWorkingDirectory)/_BUILD/Helm/api-$(Build.BuildNumber).tgz'
+                chartPath: '$(Pipeline.Workspace)/build/Helm/api-$(Build.TriggeredBy.BuildNumber).tgz'
                 chartVersion: '$(Build.BuildNumber)'
                 releaseName: api
                 overrideValues: 'image.tag=$(Build.BuildNumber)'
