@@ -48,4 +48,4 @@ stages:
                 overrideValues: 'image.tag=$(resources.pipeline.build.runName)'
                 resetValues: true
               env:
-                AppVersion: $(resources.pipeline.build.runName)
+                APP_VERSION: $(resources.pipeline.build.runName)
