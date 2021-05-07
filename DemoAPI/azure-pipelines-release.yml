@@ -44,7 +44,7 @@ stages:
                 chartType: FilePath
                 chartPath: '$(Pipeline.Workspace)/build/Helm/api-$(resources.pipeline.build.runName).tgz'
                 chartVersion: '$(resources.pipeline.build.runName)'
-                releaseName: api
+                releaseName: demo-api-blue
                 overrideValues: 'image.tag=$(resources.pipeline.build.runName)'
                 resetValues: true
               env:
