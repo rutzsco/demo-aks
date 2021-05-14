@@ -13,6 +13,7 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+applicationVersion: TBD
 
 serviceAccount:
   # Specifies whether a service account should be created
