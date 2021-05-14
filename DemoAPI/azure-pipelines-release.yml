@@ -46,7 +46,7 @@ stages:
                 chartPath: '$(Pipeline.Workspace)/build/Helm/api-$(resources.pipeline.build.runName).tgz'
                 chartVersion: '$(resources.pipeline.build.runName)'
                 releaseName: 'demo-api-green'
-                overrideValues: 'image.tag=$(resources.pipeline.build.runName)'
+                overrideValues: 'image.tag=$(resources.pipeline.build.runName), applicationVersion=$(resources.pipeline.build.runName)'
                 resetValues: true
               env:
                 APPLICATION_VERSION: $(resources.pipeline.build.runName)
@@ -63,7 +63,7 @@ stages:
                 chartPath: '$(Pipeline.Workspace)/build/Helm/api-$(resources.pipeline.build.runName).tgz'
                 chartVersion: '$(resources.pipeline.build.runName)'
                 releaseName: 'demo-api-blue'
-                overrideValues: 'image.tag=$(resources.pipeline.build.runName)'
+                overrideValues: 'image.tag=$(resources.pipeline.build.runName), applicationVersion=$(resources.pipeline.build.runName)'
                 resetValues: true
               env:
                 APPLICATION_VERSION: $(resources.pipeline.build.runName)
