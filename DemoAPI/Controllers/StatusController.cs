@@ -18,8 +18,12 @@ namespace DemoAPI.Controllers
             var variables = Environment.GetEnvironmentVariables();
             if (variables.Contains("APPLICATION_VERSION"))
                 version = variables["APPLICATION_VERSION"].ToString();
+            
+            var deploymentSlot = "Unknown";
+            if (variables.Contains("DEPLOYMENT_SLOT"))
+                deploymentSlot = variables["DEPLOYMENT_SLOT"].ToString();
 
-            var vm = new { Version = version };
+            var vm = new { Version = version, DeploymentSlot = deploymentSlot };
             return new OkObjectResult(vm);
         }
 

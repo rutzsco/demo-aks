@@ -36,6 +36,8 @@ spec:
           env:
            - name: APPLICATION_VERSION
              value: {{ .Values.applicationVersion }}
+           - name: DEPLOYMENT_SLOT
+             value: {{ .Values.deploymentSlot }}
           ports:
             - name: http
               containerPort: 80
