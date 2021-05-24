@@ -27,53 +27,13 @@ stages:
         runOnce:
           deploy:
   
-            jobs:
-            - job: deployGreen
-              displayName: Wait for external validation
-              pool: server
-              timeoutInMinutes: 4320 # job times out in 3 days
-              steps:
-              - task: HelmInstaller@0
-                displayName: 'Install Helm 3.5.4'
-                inputs:
-                  helmVersion: 3.5.4
-                  checkLatestHelmVersion: false
-              - task: HelmDeploy@0
-                displayName: 'helm upgrade'
-                inputs:
-                  connectionType: 'Azure Resource Manager'
-                  azureSubscription: '$(azureSubscription)'
-                  azureResourceGroup: '$(resourceGroupName)'
-                  kubernetesCluster: '$(kubernetesCluster)'
-                  namespace: 'demo-api'
-                  command: 'upgrade'
-                  chartType: 'FilePath'
-                  chartPath: '$(Pipeline.Workspace)/build/Helm/api-$(resources.pipeline.build.runName).tgz'
-                  chartVersion: '$(resources.pipeline.build.runName)'
-                  releaseName: 'demo-api-green'
-                  overrideValues: 'image.tag=$(resources.pipeline.build.runName),applicationVersion=$(resources.pipeline.build.runName),deploymentSlot=green'
-                  resetValues: true
-                env:
-                  APPLICATION_VERSION: $(resources.pipeline.build.runName)
-
-            - job: waitForValidation
-              displayName: Slot Validation
-              pool: server
-              timeoutInMinutes: 4320 # job times out in 3 days
-              steps:
-              - task: ManualValidation@0
-                timeoutInMinutes: 1440 # task times out in 1 day
-                inputs:
-                  notifyUsers: |
-                      scrutz@microsoft.com
-                  instructions: 'Please validate deployment'
-                  onTimeout: 'resume'
-            - job: waitForValidation
-              displayName: Wait for external validation
-              pool: server
-              timeoutInMinutes: 4320 # job times out in 3 days
-              steps:
-              - task: HelmDeploy@0
+            steps:
+            - task: HelmInstaller@0
+              displayName: 'Install Helm 3.5.4'
+              inputs:
+                helmVersion: 3.5.4
+                checkLatestHelmVersion: false
+            - task: HelmDeploy@0
               displayName: 'helm upgrade'
               inputs:
                 connectionType: 'Azure Resource Manager'
@@ -85,16 +45,41 @@ stages:
                 chartType: 'FilePath'
                 chartPath: '$(Pipeline.Workspace)/build/Helm/api-$(resources.pipeline.build.runName).tgz'
                 chartVersion: '$(resources.pipeline.build.runName)'
-                releaseName: 'demo-api-blue'
-                overrideValues: 'image.tag=$(resources.pipeline.build.runName),applicationVersion=$(resources.pipeline.build.runName),deploymentSlot=blue'
+                releaseName: 'demo-api-green'
+                overrideValues: 'image.tag=$(resources.pipeline.build.runName),applicationVersion=$(resources.pipeline.build.runName),deploymentSlot=green'
                 resetValues: true
-              env:
-                APPLICATION_VERSION: $(resources.pipeline.build.runName)
-
+            
+          postRouteTraffic:
+            pool: server  
             steps:
+            - task: ManualValidation@0
+              timeoutInMinutes: 1440 # task times out in 1 day
+              inputs:
+                notifyUsers: |
+                    scrutz@microsoft.com
+                instructions: 'Please validate deployment'
+                onTimeout: 'resume'
+          on:
+            success:          
+            steps:
+            - task: HelmInstaller@0
+              displayName: 'Install Helm 3.5.4'
+              inputs:
+                helmVersion: 3.5.4
+                checkLatestHelmVersion: false
+            - task: HelmDeploy@0
+              displayName: 'helm upgrade'
+              inputs:
+                connectionType: 'Azure Resource Manager'
+                azureSubscription: '$(azureSubscription)'
+                azureResourceGroup: '$(resourceGroupName)'
+                kubernetesCluster: '$(kubernetesCluster)'
+                namespace: 'demo-api'
+                command: 'upgrade'
+                chartType: 'FilePath'
+                chartPath: '$(Pipeline.Workspace)/build/Helm/api-$(resources.pipeline.build.runName).tgz'
+                chartVersion: '$(resources.pipeline.build.runName)'
+                releaseName: 'demo-api-green'
+                overrideValues: 'image.tag=$(resources.pipeline.build.runName),applicationVersion=$(resources.pipeline.build.runName),deploymentSlot=green'
+                resetValues: true
             
-            
-
-        
-
-
