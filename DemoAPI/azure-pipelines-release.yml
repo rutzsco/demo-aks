@@ -30,7 +30,7 @@ stages:
             steps:
             - task: PublishPipelineArtifact@1
               inputs:
-                targetPath: '$(Build.Workspace)/build/Helm'
+                targetPath: '$(Pipeline.Workspace)/build/Helm'
                 artifact: 'Helm'
                 publishLocation: 'pipeline'
             - task: HelmInstaller@0
