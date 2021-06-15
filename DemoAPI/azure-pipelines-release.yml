@@ -61,11 +61,7 @@ stages:
                 onTimeout: 'resume'
           on:
             success:          
-              steps:
-              - task: DownloadPipelineArtifact@2
-                inputs:
-                  artifact: 'build'
-                  path: $(Build.SourcesDirectory)/build
+              steps:      
               - task: HelmInstaller@0
                 displayName: 'Install Helm 3.5.4'
                 inputs:
