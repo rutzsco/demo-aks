@@ -61,7 +61,10 @@ stages:
                 onTimeout: 'resume'
           on:
             success:          
-              steps:      
+              steps:
+              - download: current
+                path: build 
+              - script: ls $(Pipeline.Workspace)
               - task: HelmInstaller@0
                 displayName: 'Install Helm 3.5.4'
                 inputs:
