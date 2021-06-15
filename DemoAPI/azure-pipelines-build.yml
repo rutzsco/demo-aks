@@ -60,6 +60,6 @@ stages:
         publishLocation: 'pipeline'
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '$(Build.SourcesDirectory)/DemoAPI/Helm/api/values.yaml'
-        artifact: 'Values'
+        targetPath: '$(Build.SourcesDirectory)/DemoAPI/Helm/'
+        artifact: 'Deploy'
         publishLocation: 'pipeline'
