@@ -40,3 +40,4 @@ $statusResponse = GetStatus -Retries $Retries -SecondsDelay $SecondsDelay -Param
 $resultObj = ConvertFrom-Json $([String]::new($statusResponse.Content))
 Write-Host $resultObj.version
 Write-Host $resultObj.deploymentSlot
+Write-Host "##vso[task.setvariable variable=DEPLOY_CURRENT_SLOT]$($resultObj.deploymentSlot)
