@@ -1,0 +1,43 @@
+parameters: 
+- name: stageName
+  default: ''
+- name: environment
+  default: ''
+- name: azureSubscription
+  default: ''
+- name: resourceGroupName
+  default: ''
+- name: region
+  default: ''
+- name: clusterName
+  default: ''
+- name: dnsPrefix
+  default: ''
+- name: sshRSAPublicKey
+  default: ''
+
+stages:
+  - stage: ${{ parameters.stageName }}
+    displayName: ${{ parameters.stageName }}
+
+    jobs:
+    - deployment: Deploy
+      displayName: Deploy
+      environment: ${{ parameters.environment }}
+      pool:
+        vmImage: 'ubuntu-latest'
+  
+      strategy:
+        runOnce:
+          deploy:
+  
+            steps:
+            - task: AzureResourceGroupDeployment@2
+              displayName: '1. Create VNet'
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                resourceGroupName: ${{ parameters.resourceGroupName }}
+                location: ${{ parameters.region }}
+                csmFile: '$(Pipeline.Workspace)/build/Infrastructure/vnet.json'
+                overrideParameters: '-vnetName ${{ parameters.clusterName }}'
+                deploymentOutputs: ResourceGroupDeploymentOutputs

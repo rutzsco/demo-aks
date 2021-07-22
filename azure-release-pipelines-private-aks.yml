@@ -1,0 +1,21 @@
+trigger: none
+
+resources:
+  pipelines:
+  - pipeline: build
+    source: 'demo-aks-core - BUILD'
+  
+variables:
+  azureSubscription: 'Demo Account'
+
+stages:
+- template: azure-release-pipelines-private-aks-stage-template.yml
+  parameters:
+    stageName: 'CI'
+    environment: 'CI-AKS'
+    azureSubscription: ${{ variables.azureSubscription }}
+    resourceGroupName: 'rutzsco-aks-private'
+    region: 'East US'
+    clusterName: 'rutzsco-aks1-private'
+    dnsPrefix: 'rutzsco-aks1-private'
+    sshRSAPublicKey: $(sshRSAPublicKey)
