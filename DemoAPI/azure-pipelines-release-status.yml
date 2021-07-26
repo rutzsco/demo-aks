@@ -28,11 +28,13 @@ stages:
           deploy:
   
             steps:
-       
-            - task: HelmInstaller@0
-              displayName: 'Install Helm 3.5.4'
+    
+            - task: PowerShell@2
               inputs:
-                helmVersion: 3.5.4
-                checkLatestHelmVersion: false
+                targetType: 'filePath'
+                filePath: $(Pipeline.Workspace)/build/Deploy/GetServiceStatus.ps1
+                failOnStderr: true
+                showWarnings: true
+              displayName: 'Get Status'
            
             
