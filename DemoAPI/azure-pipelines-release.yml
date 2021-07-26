@@ -83,6 +83,16 @@ stages:
                 inputs:
                   helmVersion: 3.5.4
                   checkLatestHelmVersion: false
+              - task: KubectlInstaller@0
+                inputs:
+                  kubectlVersion: 'latest'
+              - task: Kubernetes@1
+                inputs:
+                  connectionType: 'Kubernetes Service Connection'
+                  kubernetesServiceEndpoint: 'RUTZSCO-AKS1'
+                  namespace: 'demo-api'
+                  command: 'apply'
+                  arguments: '-f demo-api-ingress.yaml'
               - task: HelmDeploy@0
                 displayName: 'helm upgrade'
                 inputs:
