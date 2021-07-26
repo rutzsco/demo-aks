@@ -1,0 +1,38 @@
+trigger: none
+
+resources:
+  pipelines:
+  - pipeline: build
+    source: 'demo-aks-app - BUILD'
+  
+variables:
+  vmImageName: 'ubuntu-latest'
+  azureSubscription: 'Demo Account'
+
+stages:
+
+ - stage: CI
+   displayName: CI Stage 
+   variables:
+     kubernetesCluster: 'rutzsco-aks1'
+     resourceGroupName: 'rutzsco-aks'  
+   jobs:
+   - deployment: Deploy
+     displayName: Deploy
+     environment: 'CI'
+     pool:
+        vmImage: $(vmImageName)   
+      
+     strategy:
+        runOnce:
+          deploy:
+  
+            steps:
+       
+            - task: HelmInstaller@0
+              displayName: 'Install Helm 3.5.4'
+              inputs:
+                helmVersion: 3.5.4
+                checkLatestHelmVersion: false
+           
+            
