@@ -92,7 +92,7 @@ stages:
                   kubernetesServiceEndpoint: 'RUTZSCO-AKS1'
                   namespace: 'demo-api'
                   command: 'apply'
-                  arguments: '-f $(Pipeline.Workspace)/demo-api-ingress-blue.yaml'
+                  arguments: '-f $(Pipeline.Workspace)/Deploy/demo-api-ingress-blue.yaml'
               - task: HelmDeploy@0
                 displayName: 'helm upgrade'
                 inputs:
