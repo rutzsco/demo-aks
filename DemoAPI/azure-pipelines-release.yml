@@ -33,6 +33,11 @@ stages:
                 targetPath: '$(Pipeline.Workspace)/build/Helm'
                 artifact: 'Helm'
                 publishLocation: 'pipeline'
+            - task: PublishPipelineArtifact@1
+              inputs:
+                targetPath: '$(Pipeline.Workspace)/build/Deploy'
+                artifact: 'Deploy'
+                publishLocation: 'pipeline'
             - task: HelmInstaller@0
               displayName: 'Install Helm 3.5.4'
               inputs:
