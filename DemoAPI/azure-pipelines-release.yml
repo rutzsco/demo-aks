@@ -82,10 +82,11 @@ stages:
             success:          
               steps:
               - download: current
+              - script: ls $(Pipeline.Workspace)
               - task: PowerShell@2
                 inputs:
                   targetType: 'filePath'
-                  filePath: '$(Pipeline.Workspace)/build/Deploy/GetServiceStatus.ps1'
+                  filePath: '$(Pipeline.Workspace)/Deploy/GetServiceStatus.ps1'
                   failOnStderr: true
                   showWarnings: true
                 displayName: 'Get Current Slot'
