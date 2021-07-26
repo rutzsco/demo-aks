@@ -38,6 +38,11 @@ stages:
               inputs:
                 helmVersion: 3.5.4
                 checkLatestHelmVersion: false
+            - task: PowerShell@2
+              inputs:
+                filePath: '$(Pipeline.Workspace)/build/Deploy/GetServiceStatus.ps1'
+                failOnStderr: true
+                showWarnings: true
             - task: HelmDeploy@0
               displayName: 'helm upgrade'
               inputs:
@@ -79,6 +84,11 @@ stages:
                 inputs:
                   helmVersion: 3.5.4
                   checkLatestHelmVersion: false
+              - task: PowerShell@2
+                inputs:
+                  filePath: '$(Pipeline.Workspace)/build/Deploy/GetServiceStatus.ps1'
+                  failOnStderr: true
+                  showWarnings: true
               - task: HelmDeploy@0
                 displayName: 'helm upgrade'
                 inputs:
