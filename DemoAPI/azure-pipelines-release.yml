@@ -38,6 +38,15 @@ stages:
               inputs:
                 helmVersion: 3.5.4
                 checkLatestHelmVersion: false
+
+            - task: PowerShell@2
+              inputs:
+                targetType: 'filePath'
+                filePath: '$(Pipeline.Workspace)/build/Deploy/GetServiceStatus.ps1'
+                failOnStderr: true
+                showWarnings: true
+              displayName: 'Get Current Slot'
+
             - task: HelmDeploy@0
               displayName: 'helm upgrade'
               inputs:
@@ -51,7 +60,7 @@ stages:
                 chartPath: '$(Pipeline.Workspace)/build/Helm/api-$(resources.pipeline.build.runName).tgz'
                 chartVersion: '$(resources.pipeline.build.runName)'
                 releaseName: 'demo-api-green'
-                overrideValues: 'image.tag=$(resources.pipeline.build.runName),applicationVersion=$(resources.pipeline.build.runName),deploymentSlot=green'
+                overrideValues: 'image.tag=$(resources.pipeline.build.runName),applicationVersion=$(resources.pipeline.build.runName),deploymentSlot=$(DEPLOY_NEXT_SLOT)'
                 resetValues: true
                 
           postRouteTraffic:
