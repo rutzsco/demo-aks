@@ -82,12 +82,13 @@ stages:
             success:          
               steps:
               - download: current
-              - script: ls $(Pipeline.Workspace)
-              - task: HelmInstaller@0
-                displayName: 'Install Helm 3.5.4'
+              - task: PowerShell@2
                 inputs:
-                  helmVersion: 3.5.4
-                  checkLatestHelmVersion: false
+                  targetType: 'filePath'
+                  filePath: '$(Pipeline.Workspace)/build/Deploy/GetServiceStatus.ps1'
+                  failOnStderr: true
+                  showWarnings: true
+                displayName: 'Get Current Slot'
               - task: KubectlInstaller@0
                 inputs:
                   kubectlVersion: 'latest'
@@ -97,5 +98,5 @@ stages:
                   kubernetesServiceEndpoint: 'RUTZSCO-AKS1'
                   namespace: 'demo-api'
                   command: 'apply'
-                  arguments: '-f $(Pipeline.Workspace)/Deploy/demo-api-ingress-blue.yaml'
+                  arguments: '-f $(Pipeline.Workspace)/Deploy/demo-api-ingress-$(DEPLOY_NEXT_SLOT).yaml'
             
