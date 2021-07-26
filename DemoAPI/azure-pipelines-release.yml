@@ -98,19 +98,4 @@ stages:
                   namespace: 'demo-api'
                   command: 'apply'
                   arguments: '-f $(Pipeline.Workspace)/Deploy/demo-api-ingress-blue.yaml'
-              - task: HelmDeploy@0
-                displayName: 'helm upgrade'
-                inputs:
-                  connectionType: 'Azure Resource Manager'
-                  azureSubscription: '$(azureSubscription)'
-                  azureResourceGroup: '$(resourceGroupName)'
-                  kubernetesCluster: '$(kubernetesCluster)'
-                  namespace: 'demo-api'
-                  command: 'upgrade'
-                  chartType: 'FilePath'
-                  chartPath: '$(Pipeline.Workspace)/Helm/api-$(resources.pipeline.build.runName).tgz'
-                  chartVersion: '$(resources.pipeline.build.runName)'
-                  releaseName: 'demo-api-blue'
-                  overrideValues: 'image.tag=$(resources.pipeline.build.runName),applicationVersion=$(resources.pipeline.build.runName),deploymentSlot=blue'
-                  resetValues: true
             
