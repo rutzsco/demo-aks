@@ -6,7 +6,7 @@ resources:
     source: 'demo-aks-app - BUILD'
   
 variables:
-  vmImageName: 'ubuntu-latest'
+  vmImageName: 'ubuntu-18.04'
   azureSubscription: 'Demo Account'
 
 stages:
