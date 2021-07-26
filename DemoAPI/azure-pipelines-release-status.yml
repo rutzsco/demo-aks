@@ -31,14 +31,14 @@ stages:
             - task: PowerShell@2
               inputs:
                 targetType: 'filePath'
-                filePath: $(Pipeline.Workspace)/build/Deploy/test.ps1
+                filePath: $(Pipeline.Workspace)/build/Helm/test.ps1
                 failOnStderr: true
                 showWarnings: true
               displayName: 'Testing'
             - task: PowerShell@2
               inputs:
                 targetType: 'filePath'
-                filePath: $(Pipeline.Workspace)/build/Deploy/GetServiceStatus.ps1
+                filePath: $(Pipeline.Workspace)/build/Helm/GetServiceStatus.ps1
                 failOnStderr: true
                 showWarnings: true
               displayName: 'Get Status'
