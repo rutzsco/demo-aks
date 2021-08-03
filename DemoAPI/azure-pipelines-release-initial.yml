@@ -1,0 +1,52 @@
+trigger: none
+
+resources:
+  pipelines:
+  - pipeline: build
+    source: 'demo-aks-app - BUILD'
+  
+variables:
+  vmImageName: 'ubuntu-latest'
+  azureSubscription: 'Demo Account'
+
+stages:
+
+ - stage: CI
+   displayName: CI Stage 
+   variables:
+     kubernetesCluster: 'rutzsco-aks1'
+     resourceGroupName: 'rutzsco-aks'  
+   jobs:
+   - deployment: Deploy
+     displayName: Deploy
+     environment: 'CI'
+     pool:
+        vmImage: $(vmImageName)   
+      
+     strategy:
+        runOnce:
+          deploy:
+  
+            steps:
+            
+            - task: HelmInstaller@0
+              displayName: 'Install Helm 3.5.4'
+              inputs:
+                helmVersion: 3.5.4
+                checkLatestHelmVersion: false
+
+            - task: HelmDeploy@0
+              displayName: 'helm upgrade'
+              inputs:
+                connectionType: 'Azure Resource Manager'
+                azureSubscription: '$(azureSubscription)'
+                azureResourceGroup: '$(resourceGroupName)'
+                kubernetesCluster: '$(kubernetesCluster)'
+                namespace: 'demo-api'
+                command: 'upgrade'
+                chartType: 'FilePath'
+                chartPath: '$(Pipeline.Workspace)/build/Helm/api-$(resources.pipeline.build.runName).tgz'
+                chartVersion: '$(resources.pipeline.build.runName)'
+                releaseName: 'demo-api-green'
+                overrideValues: 'image.tag=$(resources.pipeline.build.runName),applicationVersion=$(resources.pipeline.build.runName),deploymentSlot=green'
+                resetValues: true
