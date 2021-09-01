@@ -18,7 +18,7 @@ namespace DemoAPI.Controllers
 
         // GET api/simulate/5
         [HttpGet("{percentage}")]
-        public string Get(int percentage)
+        public string Get(int percentage, int duration = 60000)
         {
             if (percentage < 0 || percentage > 100)
                 throw new ArgumentException("percentage");
@@ -27,7 +27,7 @@ namespace DemoAPI.Controllers
             Stopwatch watch = new Stopwatch();
             watch.Start();
             durationWatch.Start();
-            while (durationWatch.ElapsedMilliseconds < 60000)
+            while (durationWatch.ElapsedMilliseconds < duration)
             {
                 // Make the loop go on for "percentage" milliseconds then sleep the 
                 // remaining percentage milliseconds. So 40% utilization means work 40ms and sleep 60ms
