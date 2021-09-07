@@ -13,6 +13,8 @@ parameters:
   default: ''
 - name: dnsPrefix
   default: ''
+- name: logAnalyticsWorkspace
+  default: ''
 - name: sshRSAPublicKey
   default: ''
 
@@ -33,7 +35,16 @@ stages:
   
             steps:
             - task: AzureResourceGroupDeployment@2
-              displayName: '1. Create AKS Infrastructure'
+              displayName: '1. Create Log Analytics Workspace'
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                resourceGroupName: ${{ parameters.resourceGroupName }}
+                location: ${{ parameters.region }}
+                csmFile: '$(Pipeline.Workspace)/build/Infrastructure/log-analytics.json'
+                overrideParameters: '-name ${{ parameters.logAnalyticsWorkspace }}'
+                deploymentOutputs: ResourceGroupDeploymentOutputs
+            - task: AzureResourceGroupDeployment@2
+              displayName: '2. Create AKS Infrastructure'
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
                 resourceGroupName: ${{ parameters.resourceGroupName }}
@@ -41,3 +52,12 @@ stages:
                 csmFile: '$(Pipeline.Workspace)/build/Infrastructure/aks-basic.json'
                 overrideParameters: '-clusterName ${{ parameters.clusterName }} -dnsPrefix ${{ parameters.dnsPrefix }} -sshRSAPublicKey "${{ parameters.sshRSAPublicKey }}"'
                 deploymentOutputs: ResourceGroupDeploymentOutputs
+            - task: AzureCLI@2
+              displayName: 3. Attaach ACR
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                scriptType: ps
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az --version
+                  az aks update -n ${{ parameters.resourceGroupName }} -g ${{ parameters.clusterName }} --attach-acr rutzscocr

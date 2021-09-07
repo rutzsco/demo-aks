@@ -18,4 +18,5 @@ stages:
     region: 'East US'
     clusterName: 'rutzsco-aks1'
     dnsPrefix: 'rutzsco-aks1'
+    logAnalyticsWorkspace: 'rutzsco-aks-logs'
     sshRSAPublicKey: $(sshRSAPublicKey)
