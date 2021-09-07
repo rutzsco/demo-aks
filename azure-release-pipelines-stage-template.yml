@@ -60,4 +60,4 @@ stages:
                 scriptLocation: inlineScript
                 inlineScript: |
                   az --version
-                  az aks update -n ${{ parameters.resourceGroupName }} -g ${{ parameters.clusterName }} --attach-acr rutzscocr
+                  az aks update -n ${{ parameters.clusterName }} -g ${{ parameters.resourceGroupName }} --attach-acr rutzscocr
