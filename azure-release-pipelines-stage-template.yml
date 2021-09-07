@@ -56,7 +56,7 @@ stages:
               displayName: 3. Attaach ACR
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
-                scriptType: ps
+                scriptType: bash
                 scriptLocation: inlineScript
                 inlineScript: |
                   az --version
