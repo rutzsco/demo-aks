@@ -57,12 +57,11 @@ stages:
                 overrideParameters: '-clusterName ${{ parameters.clusterName }} -dnsPrefix ${{ parameters.dnsPrefix }} -sshRSAPublicKey "${{ parameters.sshRSAPublicKey }}" -acrResourceGroupName ${{ parameters.acrResourceGroup }} -acrName ${{ parameters.acrName }}'
                 deploymentOutputs: ResourceGroupDeploymentOutputs
             - task: AzureCLI@2
-              enabled: false
-              displayName: 3. Attaach ACR
+              enabled: true
+              displayName: 3. Create Ingress Namespace
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
                 scriptType: bash
                 scriptLocation: inlineScript
                 inlineScript: |
-                  az --version
-                  az aks update -n ${{ parameters.clusterName }} -g ${{ parameters.resourceGroupName }} --attach-acr rutzscocr
+                  kubectl create namespace ingress-controller
