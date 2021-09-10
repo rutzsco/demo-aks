@@ -54,7 +54,7 @@ stages:
                 resourceGroupName: ${{ parameters.resourceGroupName }}
                 location: ${{ parameters.region }}
                 csmFile: '$(Pipeline.Workspace)/build/Infrastructure/aks-basic.json'
-                overrideParameters: '-clusterName ${{ parameters.clusterName }} -dnsPrefix ${{ parameters.dnsPrefix }} -sshRSAPublicKey "${{ parameters.sshRSAPublicKey }}" -acrResourceGroupName ${{ parameters.acrResourceGroup }} -acrName ${{ parameters.rutzscocr }}'
+                overrideParameters: '-clusterName ${{ parameters.clusterName }} -dnsPrefix ${{ parameters.dnsPrefix }} -sshRSAPublicKey "${{ parameters.sshRSAPublicKey }}" -acrResourceGroupName ${{ parameters.acrResourceGroup }} -acrName ${{ parameters.acrName }}'
                 deploymentOutputs: ResourceGroupDeploymentOutputs
             - task: AzureCLI@2
               enabled: false
