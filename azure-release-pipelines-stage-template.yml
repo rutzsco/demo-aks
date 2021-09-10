@@ -56,8 +56,14 @@ stages:
                 csmFile: '$(Pipeline.Workspace)/build/Infrastructure/aks-basic.json'
                 overrideParameters: '-clusterName ${{ parameters.clusterName }} -dnsPrefix ${{ parameters.dnsPrefix }} -sshRSAPublicKey "${{ parameters.sshRSAPublicKey }}" -acrResourceGroupName ${{ parameters.acrResourceGroup }} -acrName ${{ parameters.acrName }}'
                 deploymentOutputs: ResourceGroupDeploymentOutputs
+            - task: Kubernetes@1
+              inputs:
+                connectionType: 'Kubernetes Service Connection'
+                kubernetesServiceEndpoint: 'RUTZSCO-AKS1'
+                command: 'create'
+                arguments: 'namespace ingress-controller'
             - task: AzureCLI@2
-              enabled: true
+              enabled: false
               displayName: 3. Create Ingress Namespace
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
