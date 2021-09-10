@@ -19,4 +19,6 @@ stages:
     clusterName: 'rutzsco-aks1'
     dnsPrefix: 'rutzsco-aks1'
     logAnalyticsWorkspace: 'rutzsco-aks-logs'
+    acrResourceGroup: 'rutzsco-core-cicd'
+    acrName: 'rutzscocr'
     sshRSAPublicKey: $(sshRSAPublicKey)

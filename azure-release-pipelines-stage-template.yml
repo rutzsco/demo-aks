@@ -17,6 +17,10 @@ parameters:
   default: ''
 - name: sshRSAPublicKey
   default: ''
+- name: acrResourceGroup
+  default: ''
+- name: acrName
+  default: ''
 
 stages:
   - stage: ${{ parameters.stageName }}
@@ -50,9 +54,10 @@ stages:
                 resourceGroupName: ${{ parameters.resourceGroupName }}
                 location: ${{ parameters.region }}
                 csmFile: '$(Pipeline.Workspace)/build/Infrastructure/aks-basic.json'
-                overrideParameters: '-clusterName ${{ parameters.clusterName }} -dnsPrefix ${{ parameters.dnsPrefix }} -sshRSAPublicKey "${{ parameters.sshRSAPublicKey }}"'
+                overrideParameters: '-clusterName ${{ parameters.clusterName }} -dnsPrefix ${{ parameters.dnsPrefix }} -sshRSAPublicKey "${{ parameters.sshRSAPublicKey }}" -acrResourceGroupName ${{ parameters.acrResourceGroup }} -acrName ${{ parameters.rutzscocr }}'
                 deploymentOutputs: ResourceGroupDeploymentOutputs
             - task: AzureCLI@2
+              enabled: false
               displayName: 3. Attaach ACR
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
