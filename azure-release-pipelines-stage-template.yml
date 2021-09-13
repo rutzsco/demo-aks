@@ -65,3 +65,9 @@ stages:
                 inlineScript: |
                   az aks get-credentials -n ${{ parameters.clusterName }} -g ${{ parameters.resourceGroupName }}
                   kubectl create namespace ingress-controller
+                  helm install frontend ingress-nginx/ingress-nginx \
+                  --namespace ingress-controller \
+                  --set controller.replicaCount=2 \
+                  --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
+                  --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux \
+                  --set controller.admissionWebhooks.patch.nodeSelector."beta\.kubernetes\.io/os"=linux
