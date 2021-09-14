@@ -50,3 +50,19 @@ stages:
                 releaseName: 'demo-api-green'
                 overrideValues: 'image.tag=$(resources.pipeline.build.runName),applicationVersion=$(resources.pipeline.build.runName),deploymentSlot=green'
                 resetValues: true
+
+            - task: HelmDeploy@0
+              displayName: 'helm upgrade'
+              inputs:
+                connectionType: 'Azure Resource Manager'
+                azureSubscription: '$(azureSubscription)'
+                azureResourceGroup: '$(resourceGroupName)'
+                kubernetesCluster: '$(kubernetesCluster)'
+                namespace: 'demo-api'
+                command: 'upgrade'
+                chartType: 'FilePath'
+                chartPath: '$(Pipeline.Workspace)/build/Helm/api-$(resources.pipeline.build.runName).tgz'
+                chartVersion: '$(resources.pipeline.build.runName)'
+                releaseName: 'demo-api-blue'
+                overrideValues: 'image.tag=$(resources.pipeline.build.runName),applicationVersion=$(resources.pipeline.build.runName),deploymentSlot=blue'
+                resetValues: true
