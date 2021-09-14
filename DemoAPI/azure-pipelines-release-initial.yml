@@ -66,3 +66,10 @@ stages:
                 releaseName: 'demo-api-blue'
                 overrideValues: 'image.tag=$(resources.pipeline.build.runName),applicationVersion=$(resources.pipeline.build.runName),deploymentSlot=blue'
                 resetValues: true
+            - task: Kubernetes@1
+                inputs:
+                  connectionType: 'Kubernetes Service Connection'
+                  kubernetesServiceEndpoint: '$(kubernetesCluster)'
+                  namespace: 'demo-api'
+                  command: 'apply'
+                  arguments: '-f $(Pipeline.Workspace)/build/Helm/demo-api-ingress-green.yaml'
