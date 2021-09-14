@@ -57,6 +57,16 @@ stages:
                 overrideParameters: '-clusterName ${{ parameters.clusterName }} -dnsPrefix ${{ parameters.dnsPrefix }} -sshRSAPublicKey "${{ parameters.sshRSAPublicKey }}" -acrResourceGroupName ${{ parameters.acrResourceGroup }} -acrName ${{ parameters.acrName }}'
                 deploymentOutputs: ResourceGroupDeploymentOutputs
             - task: AzureCLI@2
+              displayName: 3. Create Namespaces
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az aks get-credentials -n ${{ parameters.clusterName }} -g ${{ parameters.resourceGroupName }}
+                  kubectl apply -f $(Pipeline.Workspace)/build/Infrastructure/aks-namespace-demo-api.yml
+
+            - task: AzureCLI@2
               displayName: 3. Create Ingress Controller
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
