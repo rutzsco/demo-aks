@@ -64,10 +64,11 @@ stages:
                 scriptLocation: inlineScript
                 inlineScript: |
                   az aks get-credentials -n ${{ parameters.clusterName }} -g ${{ parameters.resourceGroupName }}
+                  kubectl apply -f $(Pipeline.Workspace)/build/Infrastructure/aks-namespace-ingress-controller.yml
                   kubectl apply -f $(Pipeline.Workspace)/build/Infrastructure/aks-namespace-demo-api.yml
 
             - task: AzureCLI@2
-              displayName: 3. Create Ingress Controller
+              displayName: 4. Create Ingress Controller
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
                 scriptType: bash
@@ -77,8 +78,6 @@ stages:
                   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
                   helm repo update
                   helm upgrade frontend ingress-nginx/ingress-nginx \
-                  --install \
-                  --create-namespace \
                   --namespace ingress-controller \
                   --set controller.replicaCount=2 \
                   --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
