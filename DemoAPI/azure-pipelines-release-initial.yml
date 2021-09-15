@@ -70,7 +70,7 @@ stages:
             - task: Kubernetes@1
               inputs:
                 connectionType: 'Kubernetes Service Connection'
-                kubernetesServiceEndpoint: '$(kubernetesCluster)'
+                kubernetesServiceEndpoint: 'rutzsco-aks1'
                 namespace: 'demo-api'
                 command: 'apply'
                 arguments: '-f $(Pipeline.Workspace)/build/Helm/demo-api-ingress-green.yaml'
