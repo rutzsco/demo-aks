@@ -1,7 +1,7 @@
 
 Function GetStatus {
     Param(
-        [string]$endpoint ='http://52.224.123.87/status',
+        [string]$endpoint ='http://13.90.75.121/status',
         [string]$method ='GET',
         [int]$Retries = 1,
         [int]$SecondsDelay = 2
