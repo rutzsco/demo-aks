@@ -73,4 +73,4 @@ stages:
                 kubernetesServiceEndpoint: 'rutzsco-aks1'
                 namespace: 'demo-api'
                 command: 'apply'
-                arguments: '-f $(Pipeline.Workspace)/build/Helm/demo-api-ingress-green.yaml'
+                arguments: '-f $(Pipeline.Workspace)/build/Deploy/demo-api-ingress-green.yaml'
