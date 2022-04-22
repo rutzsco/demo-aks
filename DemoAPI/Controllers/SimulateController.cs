@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace DemoAPI.Controllers
 {
@@ -39,6 +38,13 @@ namespace DemoAPI.Controllers
                 }
             }
 
+            return "OK";
+        }
+
+        [HttpGet("api/simulate/log/write")]
+        public string Write()
+        {
+            System.IO.File.WriteAllText($"/var/log/{Guid.NewGuid()}.txt", "HI");
             return "OK";
         }
     }
