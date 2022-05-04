@@ -6,16 +6,24 @@ resources:
     source: 'demo-aks-core - BUILD'
   
 variables:
-  azureSubscription: 'Demo Account'
+  vmImageName: 'ubuntu-latest'
 
-stages:
-- template: azure-release-pipelines-private-aks-stage-template.yml
-  parameters:
-    stageName: 'CI'
-    environment: 'CI-AKS'
-    azureSubscription: ${{ variables.azureSubscription }}
-    resourceGroupName: 'rutzsco-aks-private'
-    region: 'East US'
-    clusterName: 'rutzsco-aks1-private'
-    dnsPrefix: 'rutzsco-aks1-private'
-    sshRSAPublicKey: $(sshRSAPublicKey)
+  azureServiceConnection: ''Demo Account'
+  resourceGroupName: 'rutzsco-demo-aks-private-eastus'
+  location: 'eastus'
+  templateFile: 'Infrastructure/Private/main.bicep'
+  aksClusterName: 'rutzsco-demo-aks-private'
+  aksClusterKubernetesVersion: '1.23.5'
+
+pool:
+  vmImage: $(vmImageName)
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az group create --name $(resourceGroupName) --location $(location)  
+      az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile) --parameters location=$(location) aksClusterName=$(aksClusterName) aksClusterKubernetesVersion=$(aksClusterKubernetesVersion)

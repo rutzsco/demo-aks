@@ -18,7 +18,7 @@ param aksClusterTags object = {
   'kubenet'
 ])
 @description('Specifies the network plugin used for building Kubernetes network. - azure or kubenet.')
-param aksClusterNetworkPlugin string = 'azure'
+param aksClusterNetworkPlugin string = 'kubenet'
 
 @allowed([
   'azure'
@@ -51,7 +51,7 @@ param aksClusterLoadBalancerSku string = 'standard'
   'Free'
 ])
 @description('Specifies the tier of a managed cluster SKU: Paid or Free')
-param aksClusterSkuTier string = 'Paid'
+param aksClusterSkuTier string = 'Free'
 
 @description('Specifies the version of Kubernetes specified when creating the managed cluster.')
 param aksClusterKubernetesVersion string = '1.19.7'
