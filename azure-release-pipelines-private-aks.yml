@@ -7,7 +7,6 @@ resources:
   
 variables:
   vmImageName: 'ubuntu-latest'
-
   azureServiceConnection: ''Demo Account'
   resourceGroupName: 'rutzsco-demo-aks-private-eastus'
   location: 'eastus'
