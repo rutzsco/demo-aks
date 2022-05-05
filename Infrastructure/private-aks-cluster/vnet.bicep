@@ -36,24 +36,26 @@ resource aksSubnetNsg 'Microsoft.Network/networkSecurityGroups@2020-08-01' = {
         name: 'AllowAllInbound'
         properties: {
           direction: 'Inbound'
-          protocol: '*'
+          protocol: 'Tcp'
           access: 'Allow'
           sourceAddressPrefix: '*'
           sourcePortRange: '*'
           destinationAddressPrefix: '*'
           destinationPortRange: '*'
+          priority: 100
         }
       }
       {
         name: 'AllowAllOutbound'
         properties: {
           direction: 'Outbound'
-          protocol: '*'
+          protocol: 'Tcp'
           access: 'Allow'
           sourceAddressPrefix: '*'
           sourcePortRange: '*'
           destinationAddressPrefix: '*'
           destinationPortRange: '*'
+          priority: 100
         }
       }
     ]
