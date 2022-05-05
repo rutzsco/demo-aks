@@ -25,7 +25,7 @@ param aksClusterNetworkPlugin string = 'azure'
   'calico'
 ])
 @description('Specifies the network policy used for building Kubernetes network. - calico or azure')
-param aksClusterNetworkPolicy string = 'azure'
+param aksClusterNetworkPolicy string = 'calico'
 
 @description('Specifies the CIDR notation IP range from which to assign pod IPs when kubenet is used.')
 param aksClusterPodCidr string = '10.244.0.0/16'
@@ -203,16 +203,6 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-02-01' = {
         nodeTaints: nodePoolNodeTaints
       }
     ]
-    linuxProfile: {
-      adminUsername: aksClusterAdminUsername
-      ssh: {
-        publicKeys: [
-          {
-            keyData: aksClusterSshPublicKey
-          }
-        ]
-      }
-    }
     addonProfiles: {
       omsagent: {
         enabled: true
