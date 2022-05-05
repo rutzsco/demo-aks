@@ -174,8 +174,69 @@ param vmSubnetName string = 'VmSubnet'
 @description('Specifies the address prefix of the subnet which contains the virtual machine.')
 param vmSubnetAddressPrefix string = '10.1.0.0/24'
 
+@description('Specifies the name of the virtual machine.')
+param vmName string = 'TestVm'
+
+@description('Specifies the size of the virtual machine.')
+param vmSize string = 'Standard_DS3_v2'
+
+@description('Specifies the image publisher of the disk image used to create the virtual machine.')
+param imagePublisher string = 'Canonical'
+
+@description('Specifies the offer of the platform image or marketplace image used to create the virtual machine.')
+param imageOffer string = 'UbuntuServer'
+
+@description('Specifies the Ubuntu version for the VM. This will pick a fully patched image of this given Ubuntu version.')
+param imageSku string = '18.04-LTS'
+
+@allowed([
+  'sshPublicKey'
+  'password'
+])
+@description('Specifies the type of authentication when accessing the Virtual Machine. SSH key is recommended.')
+param authenticationType string = 'password'
+
+@description('Specifies the name of the administrator account of the virtual machine.')
+param vmAdminUsername string
+
+@description('Specifies the SSH Key or password for the virtual machine. SSH key is recommended.')
+@secure()
+param vmAdminPasswordOrKey string
+
+@allowed([
+  'Premium_LRS'
+  'StandardSSD_LRS'
+  'Standard_LRS'
+  'UltraSSD_LRS'
+])
+@description('Specifies the storage account type for OS and data disk.')
+param diskStorageAccounType string = 'Premium_LRS'
+
+@minValue(0)
+@maxValue(64)
+@description('Specifies the number of data disks of the virtual machine.')
+param numDataDisks int = 1
+
+@description('Specifies the size in GB of the OS disk of the VM.')
+param osDiskSize int = 50
+
+@description('Specifies the size in GB of the OS disk of the virtual machine.')
+param dataDiskSize int = 50
+
+@description('Specifies the caching requirements for the data disks.')
+param dataDiskCaching string = 'ReadWrite'
+
+@description('Specifies the globally unique name for the storage account used to store the boot diagnostics logs of the virtual machine.')
+param blobStorageAccountName string = 'blob${uniqueString(resourceGroup().id)}'
+
+@description('Specifies the name of the private link to the boot diagnostics storage account.')
+param blobStorageAccountPrivateEndpointName string = 'BlobStorageAccountPrivateEndpoint'
+
 @description('Specifies the Bastion subnet IP prefix. This prefix must be within vnet IP prefix address space.')
 param bastionSubnetAddressPrefix string = '10.1.1.0/26'
+
+@description('Specifies the name of the Azure Bastion resource.')
+param bastionName string = '${aksClusterName}Bastion'
 
 module vnet 'vnet.bicep' = {
   name: 'vnet'
@@ -191,6 +252,15 @@ module vnet 'vnet.bicep' = {
   }
 }
 
+module bastion 'bastion.bicep' = {
+  name: 'bastion'
+  params: {
+    bastionHostName: bastionName
+    bastionSubnetId: vnet.outputs.bastionSubnetId
+    location: location
+  }
+}
+
 module logAnalytics 'log-analytics.bicep' = {
   name: 'log-analytics.bicep'
   params: {
@@ -198,6 +268,37 @@ module logAnalytics 'log-analytics.bicep' = {
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
     logAnalyticsSku: logAnalyticsSku
     logAnalyticsRetentionInDays: logAnalyticsRetentionInDays
+  }
+}
+
+module jumpbox 'jumpbox.bicep' = {
+  name: 'jumpbox'
+  params: {
+    location: location
+
+    vmName: vmName
+    vmAdminUsername: vmAdminUsername
+    vmAdminPasswordOrKey: vmAdminPasswordOrKey
+
+    vmSize: vmSize
+    authenticationType: authenticationType
+
+    diskStorageAccounType: diskStorageAccounType
+    osDiskSize: osDiskSize
+    dataDiskCaching: dataDiskCaching
+    dataDiskSize: dataDiskSize
+    numDataDisks: numDataDisks
+
+    imageOffer: imageOffer
+    imagePublisher: imagePublisher
+    imageSku: imageSku
+
+    blobStorageAccountName: blobStorageAccountName
+    blobStorageAccountPrivateEndpointName: blobStorageAccountPrivateEndpointName
+
+    logAnalyticsWorkspaceId: logAnalytics.outputs.logAnalyticsWorkspaceId
+    virtualNetworkId: vnet.outputs.virtualNetworkResourceId
+    vmSubnetId: vnet.outputs.vmSubnetId
   }
 }
 
