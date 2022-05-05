@@ -38,6 +38,10 @@ resource aksSubnetNsg 'Microsoft.Network/networkSecurityGroups@2020-08-01' = {
           direction: 'Inbound'
           protocol: '*'
           access: 'Allow'
+          sourceAddressPrefix: '*'
+          sourcePortRange: '*'
+          destinationAddressPrefix: '*'
+          destinationPortRange: '*'
         }
       }
       {
@@ -46,6 +50,10 @@ resource aksSubnetNsg 'Microsoft.Network/networkSecurityGroups@2020-08-01' = {
           direction: 'Outbound'
           protocol: '*'
           access: 'Allow'
+          sourceAddressPrefix: '*'
+          sourcePortRange: '*'
+          destinationAddressPrefix: '*'
+          destinationPortRange: '*'
         }
       }
     ]
