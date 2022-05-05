@@ -10,7 +10,7 @@ variables:
   azureServiceConnection: 'Demo Account'
   resourceGroupName: 'rutzsco-demo-aks-private-eastus'
   location: 'eastus'
-  templateFile: '$(Pipeline.Workspace)/build/Infrastructure/private-aks-cluster/main.bicep'
+  templateFile: 'Infrastructure/private-aks-cluster/main.bicep'
   aksClusterName: 'rutzsco-demo-aks-private'
   aksClusterKubernetesVersion: '1.23.5'
 
