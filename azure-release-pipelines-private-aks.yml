@@ -24,5 +24,6 @@ steps:
     scriptType: bash
     scriptLocation: inlineScript
     inlineScript: |
+      ls
       az group create --name $(resourceGroupName) --location $(location)  
       az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile) --parameters location=$(location) aksClusterName=$(aksClusterName) aksClusterKubernetesVersion=$(aksClusterKubernetesVersion)
