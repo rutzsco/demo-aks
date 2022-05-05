@@ -30,4 +30,4 @@ steps:
     inlineScript: |
       ls
       az group create --name $(resourceGroupName) --location $(location)  
-      az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile) --parameters location=$(location) aksClusterName=$(aksClusterName) aksClusterKubernetesVersion=$(aksClusterKubernetesVersion) aksClusterAdminUsername=$(aksClusterAdminUsername) aksClusterSshPublicKey=$(aksClusterSshPublicKey) logAnalyticsWorkspaceName=$(logAnalyticsWorkspaceName) vmAdminPasswordOrKey=$(vmAdminPasswordOrKey) vmAdminUsername=$(vmAdminUsername)
+      az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile) --parameters location=$(location) aksClusterName=$(aksClusterName) aksClusterKubernetesVersion=$(aksClusterKubernetesVersion) aksClusterAdminUsername=$(aksClusterAdminUsername) aksClusterSshPublicKey=$(aksClusterSshPublicKey) logAnalyticsWorkspaceName=$(logAnalyticsWorkspaceName)
