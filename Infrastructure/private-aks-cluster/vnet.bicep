@@ -32,6 +32,7 @@ resource aksSubnetNsg 'Microsoft.Network/networkSecurityGroups@2020-08-01' = {
   properties: {
     securityRules: [
       {
+        name: 'AllowAllInbound'
         properties: {
           direction: 'Inbound'
           protocol: '*'
@@ -39,6 +40,7 @@ resource aksSubnetNsg 'Microsoft.Network/networkSecurityGroups@2020-08-01' = {
         }
       }
       {
+        name: 'AllowAllOutbound'
         properties: {
           direction: 'Outbound'
           protocol: '*'
