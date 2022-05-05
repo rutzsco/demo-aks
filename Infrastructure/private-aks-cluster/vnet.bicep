@@ -23,8 +23,31 @@ param virtualNetworkName string
 param virtualNetworkAddressPrefixes string = '10.0.0.0/8'
 
 var bastionSubnetName = 'AzureBastionSubnet'
-var bastionSubnetNsgName = 'AzureBastionSubnetNsg'
-var vmSubnetNsgName = 'VmSubnetNsg'
+var bastionSubnetNsgName = '${bastionSubnetName}Nsg'
+var vmSubnetNsgName = '${vmSubnetName}Nsg'
+
+resource aksSubnetNsg 'Microsoft.Network/networkSecurityGroups@2020-08-01' = {
+  name: 'aksSubnetNsg'
+  location: location
+  properties: {
+    securityRules: [
+      {
+        properties: {
+          direction: 'Inbound'
+          protocol: '*'
+          access: 'Allow'
+        }
+      }
+      {
+        properties: {
+          direction: 'Outbound'
+          protocol: '*'
+          access: 'Allow'
+        }
+      }
+    ]
+  }
+}
 
 resource vmSubnetNsg 'Microsoft.Network/networkSecurityGroups@2020-08-01' = {
   name: vmSubnetNsgName
@@ -174,24 +197,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-08-01' = {
           privateEndpointNetworkPolicies: 'Disabled'
           privateLinkServiceNetworkPolicies: 'Enabled'
           networkSecurityGroup: {
-            properties: {
-              securityRules: [
-                {
-                  properties: {
-                    direction: 'Inbound'
-                    protocol: '*'
-                    access: 'Allow'
-                  }
-                }
-                {
-                  properties: {
-                    direction: 'Outbound'
-                    protocol: '*'
-                    access: 'Allow'
-                  }
-                }
-              ]
-            }
+            id: aksSubnetNsg.id
           }
         }
       }
