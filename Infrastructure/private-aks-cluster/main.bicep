@@ -193,7 +193,7 @@ module ra 'ra.bicep' = {
   name: 'test'
   scope: resourceGroup('rutzsco-demo-edge-services')
   params: {
-    miID: mi.id
+    miID: mi.properties.principalId
     roleDefinitionResourceId: contributorRoleDefinition.id
     storageAccountName: storageAccountName
   }
