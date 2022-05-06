@@ -177,6 +177,31 @@ param vmSubnetAddressPrefix string = '10.1.0.0/24'
 @description('Specifies the Bastion subnet IP prefix. This prefix must be within vnet IP prefix address space.')
 param bastionSubnetAddressPrefix string = '10.1.1.0/26'
 
+
+param storageAccountName string = 'azfgsgdgfreg'
+param roleDefinitionResourceId string
+
+resource mi 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+  name: 'testui'
+  location: location
+}
+ 
+resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
+  scope: resourceGroup('rutzsco-demo-edge-services')
+  name: storageAccountName
+}
+
+resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  scope: storageAccount
+  name: guid(storageAccount.id, mi.id, roleDefinitionResourceId)
+  properties: {
+    roleDefinitionId: roleDefinitionResourceId
+    principalId: mi.id
+    principalType: 'ServicePrincipal'
+  }
+}
+
+
 module vnet 'vnet.bicep' = {
   name: 'vnet'
   params: {
