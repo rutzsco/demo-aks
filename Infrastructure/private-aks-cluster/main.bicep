@@ -179,28 +179,27 @@ param bastionSubnetAddressPrefix string = '10.1.1.0/26'
 
 
 param storageAccountName string = 'azfgsgdgfreg'
-param roleDefinitionResourceId string
+
+
+resource contributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
+  scope: subscription()
+  name: 'b24988ac-6180-42a0-ab88-20f7382dd24c'
+}
 
 resource mi 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
   name: 'testui'
   location: location
 }
  
-resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
-  scope: resourceGroup('rutzsco-demo-edge-services')
-  name: storageAccountName
-}
-
-resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  scope: storageAccount
-  name: guid(storageAccount.id, mi.id, roleDefinitionResourceId)
-  properties: {
-    roleDefinitionId: roleDefinitionResourceId
-    principalId: mi.id
-    principalType: 'ServicePrincipal'
+module ra 'ra.bicep' = {
+  name: 'test'
+  scope: resourceGroup('my-mg')
+  params: {
+    miID: mi.id
+    roleDefinitionResourceId: contributorRoleDefinition.id
+    storageAccountName: storageAccountName
   }
 }
-
 
 module vnet 'vnet.bicep' = {
   name: 'vnet'
