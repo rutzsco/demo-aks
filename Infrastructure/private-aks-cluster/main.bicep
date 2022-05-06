@@ -179,8 +179,6 @@ param bastionSubnetAddressPrefix string = '10.1.1.0/26'
 
 
 param storageAccountName string = 'azfgsgdgfreg'
-
-
 resource contributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   scope: subscription()
   name: 'b24988ac-6180-42a0-ab88-20f7382dd24c'
@@ -193,7 +191,7 @@ resource mi 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
  
 module ra 'ra.bicep' = {
   name: 'test'
-  scope: resourceGroup('my-mg')
+  scope: resourceGroup('rutzsco-demo-edge-services')
   params: {
     miID: mi.id
     roleDefinitionResourceId: contributorRoleDefinition.id
