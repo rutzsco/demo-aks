@@ -2,7 +2,13 @@
 param location string = resourceGroup().location
 
 @description('Specifies the name of the AKS cluster.')
-param aksClusterName string = 'aks-${uniqueString(resourceGroup().id)}'
+param aksClusterName string
+
+@description('Specifies the name of the cluster vnet.')
+param virtualNetworkName string
+
+@description('Specifies the RG name of the cluster vnet.')
+param virtualNetworkNameRG string
 
 @description('Specifies the DNS prefix specified when creating the managed cluster.')
 param aksClusterDnsPrefix string = aksClusterName
@@ -141,17 +147,8 @@ param nodePoolType string = 'VirtualMachineScaleSets'
 @description('Specifies the availability zones for nodes. Requirese the use of VirtualMachineScaleSets as node pool type.')
 param nodePoolAvailabilityZones array = []
 
-@description('Specifies the name of the virtual network.')
-param virtualNetworkName string = '${aksClusterName}Vnet'
-
-@description('Specifies the address prefixes of the virtual network.')
-param virtualNetworkAddressPrefixes string = '10.0.0.0/8'
-
 @description('Specifies the name of the default subnet hosting the AKS cluster.')
 param aksSubnetName string = 'AksSubnet'
-
-@description('Specifies the address prefix of the subnet hosting the AKS cluster.')
-param aksSubnetAddressPrefix string = '10.0.0.0/16'
 
 @description('Specifies the name of the Log Analytics Workspace.')
 param logAnalyticsWorkspaceName string
@@ -168,30 +165,9 @@ param logAnalyticsSku string = 'PerGB2018'
 @description('Specifies the workspace data retention in days. -1 means Unlimited retention for the Unlimited Sku. 730 days is the maximum allowed for all other Skus.')
 param logAnalyticsRetentionInDays int = 60
 
-@description('Specifies the name of the subnet which contains the virtual machine.')
-param vmSubnetName string = 'VmSubnet'
-
-@description('Specifies the address prefix of the subnet which contains the virtual machine.')
-param vmSubnetAddressPrefix string = '10.1.0.0/24'
-
-@description('Specifies the Bastion subnet IP prefix. This prefix must be within vnet IP prefix address space.')
-param bastionSubnetAddressPrefix string = '10.1.1.0/26'
-
-
-
-
-module vnet 'vnet.bicep' = {
-  name: 'vnet'
-  params: {
-    location: location
-    virtualNetworkName: virtualNetworkName
-    virtualNetworkAddressPrefixes: virtualNetworkAddressPrefixes
-    aksSubnetName: aksSubnetName
-    aksSubnetAddressPrefix: aksSubnetAddressPrefix
-    bastionSubnetAddressPrefix: bastionSubnetAddressPrefix
-    vmSubnetName: vmSubnetName
-    vmSubnetAddressPrefix: vmSubnetAddressPrefix
-  }
+resource vnet 'Microsoft.Network/virtualNetworks@2021-08-01' existing = {
+  name: virtualNetworkName
+  scope: resourceGroup(virtualNetworkNameRG)
 }
 
 module logAnalytics 'log-analytics.bicep' = {
@@ -247,7 +223,7 @@ module aks 'aks.bicep' = {
     nodePoolType: nodePoolType
     nodePoolVmSize: nodePoolVmSize
 
-    virtualNetworkId: vnet.outputs.virtualNetworkResourceId
+    virtualNetworkId: vnet.id
     logAnalyticsWorkspaceId: logAnalytics.outputs.logAnalyticsWorkspaceId
   }
 }
