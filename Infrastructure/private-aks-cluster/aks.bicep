@@ -144,8 +144,6 @@ param virtualNetworkNameRG string
 @description('Specifies the name of the default subnet hosting the AKS cluster.')
 param aksSubnetName string = 'AksSubnet'
 
-param aksUserAsssignedIdentity object
-
 var aadProfileConfiguration = {
   managed: aadProfileManaged
   enableAzureRBAC: aadProfileEnableAzureRBAC
@@ -163,12 +161,16 @@ resource aksSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-08-01' existi
   name: aksSubnetName
 }
 
+resource userasssignedidentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' existing = {
+  name: '${aksClusterName}-identity'
+}
+
 resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-02-01' = {
   name: aksClusterName
   location: location
   identity: {
     type: 'UserAssigned'
-    userAssignedIdentities: aksUserAsssignedIdentity
+    userAssignedIdentities: userasssignedidentity
   }
   tags: aksClusterTags
   sku: {

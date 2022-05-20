@@ -144,15 +144,14 @@ param nodePoolAvailabilityZones array = []
 @description('Specifies the name of the default subnet hosting the AKS cluster.')
 param aksSubnetName string = 'AksSubnet'
 
+resource userasssignedidentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+  name: '${aksClusterName}-identity'
+  location: location
+}
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-08-01' existing = {
   name: virtualNetworkName
   scope: resourceGroup(virtualNetworkNameRG)
-}
-
-resource userasssignedidentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
-  name: '${aksClusterName}-identity'
-  location: location
 }
 
 module aks 'aks.bicep' = {
@@ -179,8 +178,7 @@ module aks 'aks.bicep' = {
     aksClusterSkuTier: aksClusterSkuTier
     aksClusterTags: aksClusterTags
     aksSubnetName: aksSubnetName
-    aksUserAsssignedIdentity: userasssignedidentity
-
+  
     nodePoolAvailabilityZones: nodePoolAvailabilityZones
     nodePoolCount: nodePoolCount
     nodePoolEnableAutoScaling: nodePoolEnableAutoScaling
