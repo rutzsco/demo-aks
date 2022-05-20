@@ -11,9 +11,8 @@ variables:
   resourceGroupName: 'rutzsco-demo-aks-eastus-vnet'
   virtualNetworkName: 'rutzsco-demo-aks-eastus-vnet'
   location: 'eastus'
-  templateFile: 'Infrastructure/private-aks-cluster/main.bicep'
+  templateFile: 'Infrastructure/private-aks-cluster/main-vnet.bicep'
   
-
 pool:
   vmImage: $(vmImageName)
 
