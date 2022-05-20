@@ -135,8 +135,11 @@ param nodePoolType string = 'VirtualMachineScaleSets'
 @description('Specifies the availability zones for nodes. Requirese the use of VirtualMachineScaleSets as node pool type.')
 param nodePoolAvailabilityZones array = []
 
-@description('Specifies the id of the virtual network.')
-param virtualNetworkId string
+@description('Specifies the name of the virtual network.')
+param virtualNetworkName string
+
+@description('Specifies the RG of the virtual network.')
+param virtualNetworkNameRG string
 
 @description('Specifies the name of the default subnet hosting the AKS cluster.')
 param aksSubnetName string = 'AksSubnet'
@@ -148,10 +151,9 @@ var aadProfileConfiguration = {
   tenantID: aadProfileTenantId
 }
 
-var virtualNetworkName = last(split(virtualNetworkId, '/'))
-
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-08-01' existing = {
   name: virtualNetworkName
+  scope: resourceGroup(virtualNetworkNameRG)
 }
 
 resource aksSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-08-01' existing = {

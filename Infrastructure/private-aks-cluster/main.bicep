@@ -196,6 +196,7 @@ module aks 'aks.bicep' = {
     nodePoolType: nodePoolType
     nodePoolVmSize: nodePoolVmSize
 
-    virtualNetworkId: vnet.id
+    virtualNetworkName: virtualNetworkName
+    virtualNetworkNameRG: virtualNetworkNameRG
   }
 }
