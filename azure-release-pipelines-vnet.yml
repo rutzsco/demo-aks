@@ -1,0 +1,28 @@
+trigger: none
+
+resources:
+  pipelines:
+  - pipeline: build
+    source: 'demo-aks-core - BUILD'
+  
+variables:
+  vmImageName: 'ubuntu-latest'
+  azureServiceConnection: 'Demo Account'
+  resourceGroupName: 'rutzsco-demo-aks-eastus-vnet'
+  virtualNetworkName: 'rutzsco-demo-aks-eastus-vnet'
+  location: 'eastus'
+  templateFile: 'Infrastructure/private-aks-cluster/main.bicep'
+  
+
+pool:
+  vmImage: $(vmImageName)
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az group create --name $(resourceGroupName) --location $(location)  
+      az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile) --parameters location=$(location) virtualNetworkName=$(virtualNetworkName)
