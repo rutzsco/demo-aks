@@ -144,6 +144,12 @@ param nodePoolAvailabilityZones array = []
 @description('Specifies the name of the default subnet hosting the AKS cluster.')
 param aksSubnetName string = 'AksSubnet'
 
+
+resource contributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
+  scope: subscription()
+  name: 'b24988ac-6180-42a0-ab88-20f7382dd24c'
+}
+
 resource userasssignedidentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
   name: '${aksClusterName}-identity'
   location: location
