@@ -56,12 +56,6 @@ param aksClusterSkuTier string = 'Paid'
 @description('Specifies the version of Kubernetes specified when creating the managed cluster.')
 param aksClusterKubernetesVersion string = '1.19.7'
 
-@description('Specifies the administrator username of Linux virtual machines.')
-param aksClusterAdminUsername string
-
-@description('Specifies the SSH RSA public key string for the Linux nodes.')
-param aksClusterSshPublicKey string
-
 @description('Specifies whether enabling AAD integration.')
 param aadEnabled bool = false
 
@@ -147,9 +141,6 @@ param virtualNetworkId string
 @description('Specifies the name of the default subnet hosting the AKS cluster.')
 param aksSubnetName string = 'AksSubnet'
 
-@description('Specifies the name of the Log Analytics Workspace.')
-param logAnalyticsWorkspaceId string
-
 var aadProfileConfiguration = {
   managed: aadProfileManaged
   enableAzureRBAC: aadProfileEnableAzureRBAC
@@ -203,14 +194,6 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-02-01' = {
         nodeTaints: nodePoolNodeTaints
       }
     ]
-    addonProfiles: {
-      omsagent: {
-        enabled: true
-        config: {
-          logAnalyticsWorkspaceResourceID: logAnalyticsWorkspaceId
-        }
-      }
-    }
     enableRBAC: true
     networkProfile: {
       networkPlugin: aksClusterNetworkPlugin

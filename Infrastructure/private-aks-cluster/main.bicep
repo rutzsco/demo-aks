@@ -62,12 +62,6 @@ param aksClusterSkuTier string = 'Free'
 @description('Specifies the version of Kubernetes specified when creating the managed cluster.')
 param aksClusterKubernetesVersion string = '1.19.7'
 
-@description('Specifies the administrator username of Linux virtual machines.')
-param aksClusterAdminUsername string
-
-@description('Specifies the SSH RSA public key string for the Linux nodes.')
-param aksClusterSshPublicKey string
-
 @description('Specifies whether enabling AAD integration.')
 param aadEnabled bool = false
 
@@ -150,34 +144,15 @@ param nodePoolAvailabilityZones array = []
 @description('Specifies the name of the default subnet hosting the AKS cluster.')
 param aksSubnetName string = 'AksSubnet'
 
-@description('Specifies the name of the Log Analytics Workspace.')
-param logAnalyticsWorkspaceName string
-
-@allowed([
-  'Free'
-  'Standalone'
-  'PerNode'
-  'PerGB2018'
-])
-@description('Specifies the service tier of the workspace: Free, Standalone, PerNode, Per-GB.')
-param logAnalyticsSku string = 'PerGB2018'
-
-@description('Specifies the workspace data retention in days. -1 means Unlimited retention for the Unlimited Sku. 730 days is the maximum allowed for all other Skus.')
-param logAnalyticsRetentionInDays int = 60
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-08-01' existing = {
   name: virtualNetworkName
   scope: resourceGroup(virtualNetworkNameRG)
 }
 
-module logAnalytics 'log-analytics.bicep' = {
-  name: 'log-analytics.bicep'
-  params: {
-    location: location
-    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
-    logAnalyticsSku: logAnalyticsSku
-    logAnalyticsRetentionInDays: logAnalyticsRetentionInDays
-  }
+resource userasssignedidentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+  name: '${aksClusterName}-identity'
+  location: location
 }
 
 module aks 'aks.bicep' = {
@@ -190,7 +165,6 @@ module aks 'aks.bicep' = {
     aadProfileEnableAzureRBAC: aadProfileEnableAzureRBAC
     aadProfileManaged: aadProfileManaged
     aadProfileTenantId: aadProfileTenantId
-    aksClusterAdminUsername: aksClusterAdminUsername
     aksClusterDnsPrefix: aksClusterDnsPrefix
     aksClusterDnsServiceIP: aksClusterDnsServiceIP
     aksClusterDockerBridgeCidr: aksClusterDockerBridgeCidr
@@ -203,7 +177,6 @@ module aks 'aks.bicep' = {
     aksClusterPodCidr: aksClusterPodCidr
     aksClusterServiceCidr: aksClusterServiceCidr
     aksClusterSkuTier: aksClusterSkuTier
-    aksClusterSshPublicKey: aksClusterSshPublicKey
     aksClusterTags: aksClusterTags
     aksSubnetName: aksSubnetName
 
@@ -224,6 +197,5 @@ module aks 'aks.bicep' = {
     nodePoolVmSize: nodePoolVmSize
 
     virtualNetworkId: vnet.id
-    logAnalyticsWorkspaceId: logAnalytics.outputs.logAnalyticsWorkspaceId
   }
 }
