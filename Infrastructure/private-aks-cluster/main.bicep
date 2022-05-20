@@ -60,7 +60,7 @@ param aksClusterLoadBalancerSku string = 'standard'
 param aksClusterSkuTier string = 'Free'
 
 @description('Specifies the version of Kubernetes specified when creating the managed cluster.')
-param aksClusterKubernetesVersion string = '1.19.7'
+param aksClusterKubernetesVersion string = '1.23.5'
 
 @description('Specifies whether enabling AAD integration.')
 param aadEnabled bool = false

@@ -161,11 +161,16 @@ resource aksSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-08-01' existi
   name: aksSubnetName
 }
 
+resource userasssignedidentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' existing = {
+  name: '${aksClusterName}-identity'
+}
+
 resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-02-01' = {
   name: aksClusterName
   location: location
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: userasssignedidentity
   }
   tags: aksClusterTags
   sku: {
@@ -175,7 +180,6 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-02-01' = {
   properties: {
     kubernetesVersion: aksClusterKubernetesVersion
     dnsPrefix: aksClusterDnsPrefix
-    //TODO nodeResourceGroup: ''
     agentPoolProfiles: [
       {
         name: toLower(nodePoolName)
