@@ -15,11 +15,7 @@ variables:
   virtualNetworkName: 'rutzsco-demo-aks-eastus-vnet'
   virtualNetworkNameRG: 'rutzsco-demo-aks-eastus-vnet'
   aksClusterKubernetesVersion: '1.23.5'
-  aksClusterAdminUsername: 'developer'
-  aksClusterSshPublicKey: '1.23.5'
-  logAnalyticsWorkspaceName: 'rutzsco-demo-aks-private'
-  vmAdminPasswordOrKey: '1.23.5'
-  vmAdminUsername: 'developer'
+
 pool:
   vmImage: $(vmImageName)
 
@@ -32,4 +28,4 @@ steps:
     inlineScript: |
       ls
       az group create --name $(resourceGroupName) --location $(location)  
-      az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile) --parameters location=$(location) aksClusterName=$(aksClusterName) aksClusterKubernetesVersion=$(aksClusterKubernetesVersion) aksClusterAdminUsername=$(aksClusterAdminUsername) aksClusterSshPublicKey=$(aksClusterSshPublicKey) logAnalyticsWorkspaceName=$(logAnalyticsWorkspaceName) virtualNetworkNameRG=$(virtualNetworkNameRG) virtualNetworkName=$(virtualNetworkName) 
+      az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile) --parameters location=$(location) aksClusterName=$(aksClusterName) aksClusterKubernetesVersion=$(aksClusterKubernetesVersion) virtualNetworkNameRG=$(virtualNetworkNameRG) virtualNetworkName=$(virtualNetworkName) 
