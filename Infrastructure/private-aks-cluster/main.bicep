@@ -179,6 +179,7 @@ module aks 'aks.bicep' = {
     aksClusterSkuTier: aksClusterSkuTier
     aksClusterTags: aksClusterTags
     aksSubnetName: aksSubnetName
+    aksUserAsssignedIdentity: userasssignedidentity
 
     nodePoolAvailabilityZones: nodePoolAvailabilityZones
     nodePoolCount: nodePoolCount
