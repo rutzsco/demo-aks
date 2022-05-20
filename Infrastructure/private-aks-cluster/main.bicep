@@ -10,6 +10,9 @@ param virtualNetworkName string
 @description('Specifies the RG name of the cluster vnet.')
 param virtualNetworkNameRG string
 
+@description('Specifies the name of the default subnet hosting the AKS cluster.')
+param virtualNetworkRouteTableName string = 'rutzsco-demo-aks-private-eastus-rt'
+
 @description('Specifies the DNS prefix specified when creating the managed cluster.')
 param aksClusterDnsPrefix string = aksClusterName
 
@@ -144,9 +147,6 @@ param nodePoolAvailabilityZones array = []
 @description('Specifies the name of the default subnet hosting the AKS cluster.')
 param aksSubnetName string = 'AksSubnet'
 
-@description('Specifies the name of the default subnet hosting the AKS cluster.')
-param aksRouteTableName string = 'rutzsco-demo-aks-private-eastus-rt'
-
 resource contributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   scope: subscription()
   name: 'b24988ac-6180-42a0-ab88-20f7382dd24c'
@@ -168,7 +168,7 @@ module ra 'ra.bicep' = {
   params: {
     miID: userasssignedidentity.properties.principalId
     roleDefinitionResourceId: contributorRoleDefinition.id
-    routeTableName: aksRouteTableName
+    routeTableName: virtualNetworkRouteTableName
   }
 }
 

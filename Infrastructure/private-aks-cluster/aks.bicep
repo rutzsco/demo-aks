@@ -164,7 +164,6 @@ resource aksSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-08-01' existi
 resource userasssignedidentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' existing = {
   name: '${aksClusterName}-identity'
 }
-var UserAssignedIdentity = userasssignedidentity.id
 
 resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-02-01' = {
   name: aksClusterName
@@ -172,7 +171,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-02-01' = {
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      '${UserAssignedIdentity}':{}
+      '${userasssignedidentity.id}':{}
     }
   }
   tags: aksClusterTags
