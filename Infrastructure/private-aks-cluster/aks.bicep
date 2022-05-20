@@ -208,7 +208,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-02-01' = {
       serviceCidr: aksClusterServiceCidr
       dnsServiceIP: aksClusterDnsServiceIP
       dockerBridgeCidr: aksClusterDockerBridgeCidr
-      loadBalancerSku: aksClusterLoadBalancerSku
+      outboundType: 'userDefinedRouting'
     }
     aadProfile: (aadEnabled ? aadProfileConfiguration : null)
     apiServerAccessProfile: {
