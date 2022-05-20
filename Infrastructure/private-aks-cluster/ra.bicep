@@ -1,16 +1,16 @@
 
 param miID string
 param roleDefinitionResourceId string
-param storageAccountName string
+param routeTableName string
 
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
-  name: storageAccountName
+resource udr 'Microsoft.Network/routeTables@2021-08-01' existing = {
+   name: routeTableName
 }
 
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  scope: storageAccount
-  name: guid(storageAccount.id, miID, roleDefinitionResourceId)
+  scope: udr
+  name: guid(udr.id, miID, roleDefinitionResourceId)
   properties: {
     roleDefinitionId: roleDefinitionResourceId
     principalId: miID

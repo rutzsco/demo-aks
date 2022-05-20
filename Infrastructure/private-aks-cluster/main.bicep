@@ -144,6 +144,8 @@ param nodePoolAvailabilityZones array = []
 @description('Specifies the name of the default subnet hosting the AKS cluster.')
 param aksSubnetName string = 'AksSubnet'
 
+@description('Specifies the name of the default subnet hosting the AKS cluster.')
+param aksRouteTableName string = 'rutzsco-demo-aks-private-eastus-rt'
 
 resource contributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   scope: subscription()
@@ -158,6 +160,16 @@ resource userasssignedidentity 'Microsoft.ManagedIdentity/userAssignedIdentities
 resource vnet 'Microsoft.Network/virtualNetworks@2021-08-01' existing = {
   name: virtualNetworkName
   scope: resourceGroup(virtualNetworkNameRG)
+}
+
+module ra 'ra.bicep' = {
+  name: 'ra'
+  scope: resourceGroup(virtualNetworkNameRG)
+  params: {
+    miID: userasssignedidentity.properties.principalId
+    roleDefinitionResourceId: contributorRoleDefinition.id
+    routeTableName: aksRouteTableName
+  }
 }
 
 module aks 'aks.bicep' = {
