@@ -102,7 +102,7 @@
                 "description": "Specify the name of the Azure Container Registry."
             }
         },
-        "acrResourceGroup": {
+        "acrResourceGroupName": {
             "type": "string",
             "metadata": {
                 "description": "The name of the resource group the container registry is associated with."
@@ -121,7 +121,7 @@
             "name": "ConnectAKStoACR-8358ad50-d824-4629-9b35-2f169eabe093",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
-            "resourceGroup": "[parameters('acrResourceGroup')]",
+            "resourceGroup": "[parameters('acrResourceGroupName')]",
             "dependsOn": [
                 "[concat('Microsoft.ContainerService/managedClusters/', parameters('clusterName'))]"
             ],
