@@ -1,0 +1,18 @@
+trigger: none
+
+resources:
+  pipelines:
+  - pipeline: build
+    source: 'demo-aks-core - BUILD'
+  
+variables:
+  azureSubscription: 'Demo Account'
+
+stages:
+- template: azure-release-pipelines-stage-template.yml
+  parameters:
+    stageName: 'CI'
+    environment: 'CI-AKS'
+    azureSubscription: ${{ variables.azureSubscription }}
+    resourceGroupName: 'rutzsco-aks'
+    clusterName: 'rutzsco-aks-2'

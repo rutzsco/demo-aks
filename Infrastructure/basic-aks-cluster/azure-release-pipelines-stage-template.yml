@@ -1,0 +1,58 @@
+parameters: 
+- name: stageName
+  default: ''
+- name: environment
+  default: ''
+- name: azureSubscription
+  default: ''
+- name: resourceGroupName
+  default: ''
+- name: region
+  default: ''
+- name: clusterName
+  default: ''
+- name: dnsPrefix
+  default: ''
+- name: logAnalyticsWorkspace
+  default: ''
+- name: sshRSAPublicKey
+  default: ''
+- name: acrResourceGroup
+  default: ''
+- name: acrName
+  default: ''
+
+stages:
+  - stage: ${{ parameters.stageName }}
+    displayName: ${{ parameters.stageName }}
+
+    jobs:
+    - deployment: Deploy
+      displayName: Deploy
+      environment: ${{ parameters.environment }}
+      pool:
+        vmImage: 'ubuntu-latest'
+  
+      strategy:
+        runOnce:
+          deploy:
+  
+            steps:
+            - task: AzureCLI@2
+              inputs:
+                azureSubscription: $(azureServiceConnection)
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  ls
+                  az group create --name $(resourceGroupName) --location $(location)  
+
+            - task: AzureResourceGroupDeployment@2
+              displayName: '2. Create AKS Infrastructure'
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                resourceGroupName: ${{ parameters.resourceGroupName }}
+                location: ${{ parameters.region }}
+                csmFile: '$(Pipeline.Workspace)/build/Infrastructure/aks-basic-v2.json'
+                overrideParameters: '-clusterName ${{ parameters.clusterName }} -dnsPrefix ${{ parameters.dnsPrefix }} -acrResourceGroupName ${{ parameters.acrResourceGroup }} -acrName ${{ parameters.acrName }}'
+                deploymentOutputs: ResourceGroupDeploymentOutputs
