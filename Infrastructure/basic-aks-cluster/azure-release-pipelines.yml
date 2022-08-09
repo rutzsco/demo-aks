@@ -13,6 +13,6 @@ stages:
   parameters:
     stageName: 'CI'
     environment: 'CI-AKS'
-    azureServiceConnection: ${{ variables.azureSubscription }}
+    azureServiceConnection: $(azureSubscription)
     resourceGroupName: 'rutzsco-aks-2'
     clusterName: 'rutzsco-aks-2'
