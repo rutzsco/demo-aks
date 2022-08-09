@@ -16,3 +16,4 @@ stages:
     azureServiceConnection: $(azureSubscription)
     resourceGroupName: 'rutzsco-aks-2'
     clusterName: 'rutzsco-aks-2'
+    location: 'eastus'
