@@ -33,11 +33,5 @@ stages:
                 scriptType: bash
                 scriptLocation: inlineScript
                 inlineScript: |
-                  ls
                   az group create --name $(resourceGroupName) --location $(location)
-                  az deployment group create -g $(resourceGroupName)  --template-uri https://github.com/Azure/AKS-Construction/releases/download/0.8.8/main.json --parameters \
-	                  resourceName=az-$(resourceGroupName) \
-	                  agentCount=1 \
-	                  agentVMSize=Standard_B2s \
-	                  agentCountMax=5 \
-	                  networkPlugin=kubenet
+                  az deployment group create -g $(resourceGroupName)  --template-uri https://github.com/Azure/AKS-Construction/releases/download/0.8.8/main.json --parameters resourceName=az-$(resourceGroupName) agentCount=1 agentVMSize=Standard_B2s agentCountMax=5 networkPlugin=kubenet
