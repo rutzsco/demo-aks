@@ -29,7 +29,7 @@ stages:
             steps:
             - task: AzureCLI@2
               inputs:
-                azureSubscription: $(azureServiceConnection)
+                azureSubscription: ${{ parameters.azureServiceConnection }}
                 scriptType: bash
                 scriptLocation: inlineScript
                 inlineScript: |
