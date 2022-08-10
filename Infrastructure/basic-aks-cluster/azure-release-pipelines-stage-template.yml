@@ -36,4 +36,4 @@ stages:
                 scriptLocation: inlineScript
                 inlineScript: |
                   az group create --name ${{ parameters.resourceGroupName }} --location ${{ parameters.location }} 
-                  az deployment group create -g ${{ parameters.resourceGroupName }}  --template-uri https://github.com/Azure/AKS-Construction/releases/download/0.8.8/main.json --parameters resourceName=${{ parameters.clusterName }} maxPods=15 agentCount=1 agentVMSize=Standard_B2s agentCountMax=2 networkPlugin=kubenet osDiskType=Managed
+                  az deployment group create -g ${{ parameters.resourceGroupName }}  --template-uri https://github.com/Azure/AKS-Construction/releases/download/0.8.8/main.json --parameters resourceName=${{ parameters.clusterName }} podCidr='10.240.100.0/23' agentCount=1 agentVMSize=Standard_B2s agentCountMax=2 networkPlugin=kubenet osDiskType=Managed
