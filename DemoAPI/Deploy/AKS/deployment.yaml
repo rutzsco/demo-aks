@@ -1,0 +1,48 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: simulationservice
+  labels:
+    app: simulationservice
+spec:
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  selector:
+    app: simulationservice
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simulationservice
+  labels:
+    app: simulationservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simulationservice
+  template:
+    metadata:
+      labels:
+        app: simulationservice
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+      - name: simulationservice
+        image: rutzscolabcr.azurecr.io/simulation/demo-api:latest
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 1000m
+            memory: 200Mi
