@@ -14,6 +14,6 @@ stages:
     stageName: 'CI'
     environment: 'CI-AKS'
     azureServiceConnection: $(azureSubscription)
-    resourceGroupName: 'rutzsco-aks-002'
-    clusterName: 'rutzsco-aks-002'
+    resourceGroupName: 'rutzsco-aks-003'
+    clusterName: 'rutzsco-aks-003'
     location: 'eastus'
