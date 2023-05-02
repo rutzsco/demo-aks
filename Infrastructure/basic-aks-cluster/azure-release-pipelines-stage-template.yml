@@ -11,7 +11,10 @@ parameters:
   default: ''
 - name: clusterName
   default: ''
-
+- name: k8version
+  default: 'kubernetesVersion=1.25'
+- name: k8options
+  default: 'agentCount=1 JustUseSystemPool=true agentCountMax=3 omsagent=true retentionInDays=30 networkPlugin=kubenet fileCSIDriver=false diskCSIDriver=false'
 
 stages:
   - stage: ${{ parameters.stageName }}
@@ -36,4 +39,4 @@ stages:
                 scriptLocation: inlineScript
                 inlineScript: |
                   az group create --name ${{ parameters.resourceGroupName }} --location ${{ parameters.location }} 
-                  az deployment group create -g ${{ parameters.resourceGroupName }}  --template-uri https://github.com/Azure/AKS-Construction/releases/download/0.9.14/main.json --parameters resourceName=${{ parameters.clusterName }}  agentCount=1 JustUseSystemPool=true agentCountMax=3 omsagent=true retentionInDays=30 networkPlugin=kubenet fileCSIDriver=false diskCSIDriver=false
+                  az deployment group create -g ${{ parameters.resourceGroupName }}  --template-uri https://github.com/Azure/AKS-Construction/releases/download/0.9.14/main.json --parameters resourceName=${{ parameters.clusterName }} ${{ parameters.k8version }} ${{ parameters.k8options }} 
