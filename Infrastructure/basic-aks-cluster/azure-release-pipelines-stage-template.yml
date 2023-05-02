@@ -14,7 +14,7 @@ parameters:
 - name: k8version
   default: 'kubernetesVersion=1.25'
 - name: k8options
-  default: 'agentCount=1 JustUseSystemPool=true agentCountMax=3 omsagent=true retentionInDays=30 networkPlugin=kubenet fileCSIDriver=false diskCSIDriver=false'
+  default: 'agentCount=2 JustUseSystemPool=true agentCountMax=3 omsagent=true retentionInDays=30 networkPlugin=kubenet fileCSIDriver=false diskCSIDriver=false'
 
 stages:
   - stage: ${{ parameters.stageName }}
