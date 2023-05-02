@@ -14,7 +14,7 @@ stages:
     stageName: 'CI'
     environment: 'CI-AKS'
     azureServiceConnection: $(azureSubscription)
-    resourceGroupName: 'rutzsco-aks-002'
-    clusterName: 'rutzsco-aks-002'
+    resourceGroupName: 'rutzsco-aks-1-24'
+    clusterName: 'rutzsco-aks-1-24'
     location: 'eastus'
-    k8version: 'kubernetesVersion=1.25'
+    k8version: 'kubernetesVersion=1.24'
