@@ -17,5 +17,5 @@ stages:
     resourceGroupName: 'rutzsco-aks-S1'
     clusterName: 'rutzsco-aks-S1'
     location: 'eastus'
-    k8version: 'kubernetesVersion=1.23'
+    k8version: 'kubernetesVersion=1.25'
     k8options: 'agentCount=1 SystemPoolType=Standard agentCountMax=3 networkPlugin=kubenet createAksMetricAlerts=false omsagent=true retentionInDays=30'
