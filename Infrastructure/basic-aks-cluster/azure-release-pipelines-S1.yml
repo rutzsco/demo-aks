@@ -1,0 +1,20 @@
+trigger: none
+
+resources:
+  pipelines:
+  - pipeline: build
+    source: 'demo-aks-core - BUILD'
+  
+variables:
+  azureSubscription: 'Demo Account'
+
+stages:
+- template: azure-release-pipelines-stage-template.yml
+  parameters:
+    stageName: 'CI'
+    environment: 'CI-AKS'
+    azureServiceConnection: $(azureSubscription)
+    resourceGroupName: 'rutzsco-aks-S1'
+    clusterName: 'rutzsco-aks-S1'
+    location: 'eastus'
+    k8options: 'agentCount=1 SystemPoolType=Standard agentCountMax=3 networkPlugin=kubenet createAksMetricAlerts=false omsagent=true retentionInDays=30'
